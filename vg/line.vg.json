@@ -19,14 +19,14 @@
         "timeUnit": "year",
         "field": "year",
         "scale": {"domain": [1960, 2020]},
-        "axis": {"tickCount": 5},
+        "axis": {"tickCount": 5, "grid": false},
         "title": "Year"
       },
       "y": {
         "field": "no_station",
         "type": "quantitative",
         "scale": {"domain": [4, 24]},
-        "axis": {"tickCount": 7},
+        "axis": {"tickCount": 7, "grid": false},
         "title": "Number of Stations"
       },
       "color": {
