@@ -25,7 +25,7 @@
       "y": {
         "field": "no_station",
         "type": "quantitative",
-        "scale": {"domain": [4, 24]},
+        "scale": {"domain": [0, 24]},
         "axis": {"tickCount": 7, "grid": false},
         "title": "Number of Stations"
       },
