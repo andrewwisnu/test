@@ -1,0 +1,47 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 625,
+    "height": 590,
+    "title": "Number of Stations per Shinkansen Lines Throughout the Years",
+    "data": {
+      "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/data/shinkansen_year_short.csv"
+    },
+    "params":[
+  {
+  "name": "shinkansen_highlight",
+  "select": {"type": "point", "fields": ["shinkansen_line"]},
+  "bind": "legend"
+  }
+  ],
+    "mark": {"type": "line"},
+    "encoding": {
+      "x": {
+        "timeUnit": "year",
+        "field": "year",
+        "scale": {"domain": [1960, 2020]},
+        "axis": {"tickCount": 5},
+        "title": "Year"
+      },
+      "y": {
+        "field": "no_station",
+        "type": "quantitative",
+        "scale": {"domain": [4, 24]},
+        "axis": {"tickCount": 7},
+        "title": "Number of Stations"
+      },
+      "color": {
+        "field": "shinkansen_line",
+        "type": "nominal",
+        "title": "Shinkansen Line"
+      },
+      "opacity": {
+  "condition": {"param": "shinkansen_highlight", "value": 0.6},
+  "value": 0.2
+  },
+      "tooltip": [
+        {"field": "year_placeholder", "type": "ordinal", "title": "Year"},
+        {"field": "no_station", "type": "quantitative", "title": "No. of Stations"},
+        {"field": "shinkansen_line", "type": "nominal", "title": "Shinkansen Line"}
+      ]
+    }
+  }

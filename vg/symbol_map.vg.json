@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 590,
+  "title": "Japan Railways Shinkansen Stations per Prefecture",
+  "projection": {"type": "equirectangular"},
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/topojson/japan_sea.json",
+        "format": {"type": "topojson", "feature": "ne_110m_ocean"}
+      },
+      "mark": {"type": "geoshape", "fill": "skyblue"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/topojson/japan_sea.json",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "mark": {"type": "geoshape", "fill": "#f5f5dc", "stroke": "#c5c5c5"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/topojson/japan_sea.json",
+        "format": {"type": "topojson", "feature": "japan"}
+      },
+      "mark": {"type": "geoshape", "fill": "#f5f5dc", "stroke": "#c5c5c5"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/topojson/japan_sea.json",
+        "format": {"type": "topojson", "feature": "ne_110m_graticules_5"}
+      },
+      "mark": {"type": "geoshape", "fill": null, "stroke": "lightgray"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/data/map_data.csv"
+      },
+      "transform": [
+        {"calculate": "datum.number_of_stations", "as": "Number of Stations"},
+        {"calculate": "datum.shinkansen_line", "as": "Shinkansen Line"},
+        {"calculate": "datum.prefecture", "as": "Prefecture"},
+        {
+          "calculate": "datum.avg_distance_from_tokyo_st",
+          "as": "Average Distance (km)"
+        },
+        {"calculate": "datum.company", "as": "Company"},
+        {"calculate": "datum.latitude", "as": "Latitude"},
+        {"calculate": "datum.longitude", "as": "Longitude"}
+      ],
+      "mark": {"type": "circle"},
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "size": {
+          "field": "number_of_stations",
+          "type": "quantitative",
+          "title": ["Number of", "Stations"],
+          "scale": {"domain": [0, 10]}
+        },
+        "color": {
+          "field": "avg_distance_from_tokyo_st",
+          "type": "quantitative",
+          "title": ["Average Distance", "from Tokyo (km)"],
+          "scale": {
+            "range": [
+              "#fa9fb5",
+              "#f768a1",
+              "#dd3497",
+              "#ae017e",
+              "#7a0177",
+              "#49006a"
+            ]
+          }
+        },
+        "tooltip": [
+          {"field": "Number of Stations", "type": "quantitative"},
+          {"field": "Prefecture", "type": "nominal"},
+          {"field": "Shinkansen Line", "type": "nominal"},
+          {"field": "Average Distance (km)", "type": "quantitative"},
+          {"field": "Company", "type": "nominal"},
+          {"field": "Longitude", "type": "quantitative"},
+          {"field": "Latitude", "type": "quantitative"}
+        ]
+      }
+    }
+  ]
+}

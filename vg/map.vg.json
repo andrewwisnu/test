@@ -1,0 +1,137 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 590,
+  "title": "Japan Railways Shinkansen Stations per Prefecture",
+  "projection": {"type": "equirectangular"},
+  "params": [
+    {
+      "name": "region_selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "Chubu (中部)",
+          "Chugoku (中国)",
+          "Hokkaido (北海道)",
+          "Kanto (関東)",
+          "Kansai (関西)",
+          "Kyushu (九州)",
+          "Tohoku (東北)"
+        ],
+        "labels": [
+          "Show All",
+          "Chubu (中部)",
+          "Chugoku (中国)",
+          "Hokkaido (北海道)",
+          "Kanto (関東)",
+          "Kansai (関西)",
+          "Kyushu (九州)",
+          "Tohoku (東北)"
+        ],
+        "name": "Region Selection: "
+      }
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/topojson/japan_sea.json",
+        "format": {"type": "topojson", "feature": "japan"}
+      },
+      "mark": {"type": "geoshape", "fill": "#f5f5dc", "stroke": "#c5c5c5"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/andrewwisnu/FIT3179-Data-Visualisation-2/main/data/map_data_final.csv"
+      },
+      "transform": [
+        {
+          "filter": "region_selection == null || datum.region == region_selection"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {"type": "circle"},
+          "encoding": {
+            "longitude": {"field": "longitude", "type": "quantitative"},
+            "latitude": {"field": "latitude", "type": "quantitative"},
+            "size": {
+              "field": "number_of_stations",
+              "type": "quantitative",
+              "title": ["Number of", "Stations"],
+              "scale": {"domain": [0, 10]}
+            },
+            "color": {
+              "field": "avg_distance_from_tokyo_st",
+              "type": "quantitative",
+              "title": ["Average Distance", "from Tokyo (km)"],
+              "scale": {
+                "range": [
+                  "#fa9fb5",
+                  "#f768a1",
+                  "#dd3497",
+                  "#ae017e",
+                  "#7a0177",
+                  "#49006a"
+                ]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "number_of_stations",
+                "type": "quantitative",
+                "title": "Number of Stations"
+              },
+              {"field": "prefecture", "type": "nominal", "title": "Prefecture"},
+              {"field": "region", "type": "nominal", "title": "Region"},
+              {
+                "field": "shinkansen_line",
+                "type": "nominal",
+                "title": "Shinkansen Line"
+              },
+              {
+                "field": "avg_distance_from_tokyo_st",
+                "type": "quantitative",
+                "title": "Average Distance (km)"
+              },
+              {"field": "company", "type": "nominal", "title": "Company"},
+              {
+                "field": "longitude",
+                "type": "quantitative",
+                "title": "Longitude"
+              },
+              {"field": "latitude", "type": "quantitative", "title": "Latitude"}
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "window": [{"op": "rank", "as": "ranking"}],
+              "sort": [{"field": "number_of_stations", "order": "descending"}]
+            },
+            {"filter": "datum.ranking == 1"},
+            {
+              "calculate": "'Most Number of Stations is in; Yamagata Prefecture; with 10 Stations' ",
+              "as": "text_annotation_raw"
+            },
+            {
+              "calculate": "split(datum.text_annotation_raw,';')",
+              "as": "text_annotation"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dx": 217,
+            "dy": -3,
+            "baseline": "middle",
+            "fontStyle": "italic"
+          },
+          "encoding": {"text": {"field": "text_annotation"}}
+        }
+      ]
+    }
+  ]
+}
